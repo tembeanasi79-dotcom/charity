@@ -469,6 +469,27 @@ nav .nav-donate:hover {
   max-width: 90%;
   max-height: 90%;
   object-fit: contain;
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+/* Lazy loaded image animation */
+.partner-logo img[data-src] {
+  opacity: 0.6;
+}
+
+.partner-logo img.loaded {
+  opacity: 1;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ================= CTA SECTION ================= */
