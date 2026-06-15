@@ -55,9 +55,52 @@ function initCounters() {
   }
 }
 
+// Lazy load partner logos
+function initPartnerLogos() {
+  const partnerImages = document.querySelectorAll('.partner-img');
+  
+  if ('IntersectionObserver' in window) {
+    const imageObserverOptions = {
+      threshold: 0.1,
+      rootMargin: '50px'
+    };
+
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          const dataSrc = img.getAttribute('data-src');
+          
+          if (dataSrc) {
+            img.src = dataSrc;
+            img.removeAttribute('data-src');
+            img.classList.add('loaded');
+          }
+          
+          imageObserver.unobserve(img);
+        }
+      });
+    }, imageObserverOptions);
+
+    partnerImages.forEach(img => imageObserver.observe(img));
+  } else {
+    // Fallback: load all images immediately
+    partnerImages.forEach(img => {
+      const dataSrc = img.getAttribute('data-src');
+      if (dataSrc) {
+        img.src = dataSrc;
+      }
+    });
+  }
+}
+
 // Initialize counters when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initCounters);
+  document.addEventListener('DOMContentLoaded', () => {
+    initCounters();
+    initPartnerLogos();
+  });
 } else {
   initCounters();
+  initPartnerLogos();
 }
